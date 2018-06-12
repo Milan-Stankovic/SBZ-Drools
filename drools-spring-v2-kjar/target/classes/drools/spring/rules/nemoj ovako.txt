@@ -1,0 +1,34 @@
+if($temp.getVrednosti().get("DIJABETES") !=null ){
+           if($temp.getVrednosti().get("HIPERTENZIJA") !=null ){
+                if($temp.getVrednosti().get("HIPERTENZIJA") > $temp.getVrednosti().get("DIJABETES")){
+                    bolesti.getBolesti().add("HIPERTENZIJA");
+                }else {
+                     bolesti.getBolesti().add("DIJABETES");
+                }
+           }else {
+               bolesti.getBolesti().add("DIJABETES");
+           }
+
+        }else{
+            if($temp.getVrednosti().get("HIPERTENZIJA") !=null ){
+                bolesti.getBolesti().add("HIPERTENZIJA");
+            }
+        }
+		
+		
+		  if($temp.getVrednosti().get("HRONICNA") != null ){
+            if($temp.getVrednosti().get("AKUTNA") != null){
+                if($temp.getVrednosti().get("AKUTNA") > $temp.getVrednosti().get("HRONICNA")){
+                    bolesti.getBolesti().add("AKUTNA BUBREZNA POVREDA");
+                    }else {
+                          bolesti.getBolesti().add("HRONICNA BUBREZNA BOLEST");
+                    }
+            }else{
+                bolesti.getBolesti().add("HRONICNA BUBREZNA BOLEST");
+            }
+
+        }else {
+            if($temp.getVrednosti().get("AKUTNA") != null){
+                bolesti.getBolesti().add("AKUTNA BUBREZNA POVREDA");
+            }
+        }
