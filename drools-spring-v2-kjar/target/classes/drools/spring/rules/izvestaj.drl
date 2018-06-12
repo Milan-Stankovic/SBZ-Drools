@@ -1,0 +1,216 @@
+import sbz.projekat.dto.IzvestajDTO;
+import sbz.projekat.dto.DoktoriDTO;
+import sbz.projekat.model.Pacijent;
+import sbz.projekat.model.IstorijaBolesti;
+import sbz.projekat.model.Bolest;
+import sbz.projekat.model.Lek;
+import sbz.projekat.model.enums.TipLeka;
+import java.util.Date
+import java.util.ArrayList;
+
+
+global IzvestajDTO izvestaj;
+
+rule "Izvestaj hronicni upala krajnika"
+    agenda-group "izvestaj"
+    salience 100
+    when
+        $dto: Pacijent($istorija :istorija, $id : id  )
+        $date : Date()
+        $kolicina : Number(intValue >5) from accumulate(
+             IstorijaBolesti(
+                izvestaj.checkDane($date, vreme, 730),
+                $bolesti : bolesti
+            ) from $istorija,
+            init(int count = 0;),
+            action(
+                     for( Object b: $bolesti )
+                        if("UPALA KRAJNIKA".equals(((Bolest)b).getNaziv()) ) count += 1;
+                 ),
+            result(count)
+        )
+    then
+        if(!izvestaj.getHronicni().contains($id))
+            izvestaj.getHronicni().add($id);
+end
+
+
+rule "Izvestaj hronicni sinusna"
+    agenda-group "izvestaj"
+    salience 100
+    when
+        $dto: Pacijent($istorija :istorija,  $id : id  )
+        $date : Date()
+        $kolicina : Number(intValue >5) from accumulate(
+           IstorijaBolesti(
+                izvestaj.checkDane($date, vreme, 730),
+                $bolesti : bolesti
+            ) from $istorija,
+            init(int count = 0;),
+            action(
+                     for( Object b: $bolesti )
+                        if("SINUSNA INFEKCIJA".equals(((Bolest)b).getNaziv()) ) count += 1;
+                 ),
+            result(count)
+        )
+    then
+        if(!izvestaj.getHronicni().contains($id))
+            izvestaj.getHronicni().add($id);
+end
+
+rule "Izvestaj hronicni dijabetes"
+    agenda-group "izvestaj"
+    salience 100
+    when
+        $dto: Pacijent($istorija :istorija,  $id : id  )
+        $date : Date()
+        $kolicina : Number(intValue >5) from accumulate(
+           IstorijaBolesti(
+                izvestaj.checkDane($date, vreme, 730),
+                $bolesti : bolesti
+            ) from $istorija,
+            init(int count = 0;),
+            action(
+                     for( Object b: $bolesti )
+                        if("DIJABETES".equals(((Bolest)b).getNaziv()) ) count += 1;
+                 ),
+            result(count)
+        )
+    then
+        if(!izvestaj.getHronicni().contains($id))
+            izvestaj.getHronicni().add($id);
+end
+
+rule "Izvestaj hronicni hipertenzija"
+    agenda-group "izvestaj"
+    salience 100
+    when
+        $dto: Pacijent($istorija :istorija,  $id : id  )
+        $date : Date()
+        $kolicina : Number(intValue >5) from accumulate(
+           IstorijaBolesti(
+                izvestaj.checkDane($date, vreme, 730),
+                $bolesti : bolesti
+            ) from $istorija,
+            init(int count = 0;),
+            action(
+                     for( Object b: $bolesti )
+                        if("HIPERTENZIJA".equals(((Bolest)b).getNaziv()) ) count += 1;
+                 ),
+            result(count)
+        )
+    then
+        if(!izvestaj.getHronicni().contains($id))
+            izvestaj.getHronicni().add($id);
+end
+
+rule "Izvestaj hronicni hronicna bubrezna"
+    agenda-group "izvestaj"
+    salience 100
+    when
+        $dto: Pacijent($istorija :istorija,  $id : id  )
+        $date : Date()
+        $kolicina : Number(intValue >5) from accumulate(
+           IstorijaBolesti(
+                izvestaj.checkDane($date, vreme, 730),
+                $bolesti : bolesti
+            ) from $istorija,
+            init(int count = 0;),
+            action(
+                     for( Object b: $bolesti )
+                        if("HRONICNA BUBREZNA BOLEST".equals(((Bolest)b).getNaziv()) ) count += 1;
+                 ),
+            result(count)
+        )
+    then
+        if(!izvestaj.getHronicni().contains($id))
+            izvestaj.getHronicni().add($id);
+end
+
+
+rule "Izvestaj hronicni akutna bubrezna"
+    agenda-group "izvestaj"
+    salience 100
+    when
+        $dto: Pacijent($istorija :istorija,  $id : id  )
+        $date : Date()
+        $kolicina : Number(intValue >5) from accumulate(
+           IstorijaBolesti(
+                izvestaj.checkDane($date, vreme, 730),
+                $bolesti : bolesti
+            ) from $istorija,
+            init(int count = 0;),
+            action(
+                     for( Object b: $bolesti )
+                        if("AKUTNA BUBREZNA POVREDA".equals(((Bolest)b).getNaziv()) ) count += 1;
+                 ),
+            result(count)
+        )
+    then
+        if(!izvestaj.getHronicni().contains($id))
+            izvestaj.getHronicni().add($id);
+end
+
+
+
+rule "Izvestaj zavisnici"
+    agenda-group "izvestaj"
+    salience 100
+    when
+        $dto: Pacijent($istorija :istorija,  $id : id, $istorija.size >=3  )
+        $date : Date()
+        $temp : DoktoriDTO()
+        $kolicina : Number(intValue >6) from accumulate(
+           IstorijaBolesti(
+                izvestaj.checkDane($date, vreme, 180),
+                $lekovi : terapija,
+                $doktor :doktor
+            ) from $istorija,
+            init(int count = 0;),
+            action(
+                    if(!$temp.getDoktori().contains($doktor.getId()))
+                            $temp.getDoktori().add($doktor.getId());
+                     for( Object l: $lekovi )
+                        if( TipLeka.ANALGETIK ==((Lek)l).getTip() ) count += 1;
+                 ),
+            result(count)
+        )
+    then
+        if($temp.getDoktori().size() >=3)
+            izvestaj.getZavisnici().add($id);
+        $temp.setDoktori(new ArrayList<Long>());
+end
+
+
+
+rule "Izvestaj imunitet"
+    agenda-group "izvestaj"
+    salience 100
+    when
+        $dto: Pacijent($istorija :istorija,  $id : id, $istorija.size >=10  )
+        $date : Date()
+        $temp : DoktoriDTO()
+        $oslabljen : Boolean() from accumulate( // Vise od 10 puta u 2 meseca
+           IstorijaBolesti(
+                izvestaj.checkDane($date, vreme, 365),
+                $lekovi : terapija,
+                $bolesti : bolesti
+            ) from $istorija,
+            init(int count = 0; boolean b = true;),
+            action( count += 1; // Da li ih ima preko 10 u godinu dana
+                 for( Object b: $bolesti )
+                     if(!$temp.getDoktori().contains(((Bolest)b).getId()))  // Barem 2 bolesti
+                            $temp.getDoktori().add(((Bolest)b).getId());
+
+                 for( Object l: $lekovi )  // DA li su uvek prepisani lekovi
+                    if(  TipLeka.ANTIBIOTIK !=((Lek)l).getTip() )
+                        b=false;
+            ),
+            result(count>10 && b)
+        )
+
+    then
+        if($temp.getDoktori().size() >=2)
+            izvestaj.getImunitet().add($id);
+        $temp.setDoktori(new ArrayList<Long>());
+end

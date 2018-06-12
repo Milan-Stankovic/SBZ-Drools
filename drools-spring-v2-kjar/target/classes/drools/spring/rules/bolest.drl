@@ -1,0 +1,138 @@
+package drools.spring.rules
+
+import sbz.projekat.dto.DijagnozaDTO;
+
+
+global DijagnozaDTO sviSimptomi;
+
+
+rule "Groznica bolest"
+    agenda-group "bolest"
+    salience 100
+    when
+        $dto: String( this == "GROZNICA")
+    then
+        System.out.println("Groznica ");
+        sviSimptomi.getSimptomi().add("CURENJE IZ NOSA");
+        sviSimptomi.getSimptomi().add("BOL U GRLU");
+        sviSimptomi.getSimptomi().add("GLAVOBOLJA");
+        sviSimptomi.getSimptomi().add("KIJANJE");
+        sviSimptomi.getSimptomi().add("KASALJ");
+        sviSimptomi.getSimptomi().add("DRHTAVICA");
+        sviSimptomi.getSimptomi().add("TEMPERATURA VECA OD 38C");
+end
+
+
+rule "Prehlada bolest"
+    agenda-group "bolest"
+    salience 100
+    when
+        $dto: String( this == "PREHLADA")
+    then
+        System.out.println("Prehlada ");
+        sviSimptomi.getSimptomi().add("CURENJE IZ NOSA");
+        sviSimptomi.getSimptomi().add("BOL U GRLU");
+        sviSimptomi.getSimptomi().add("GLAVOBOLJA");
+        sviSimptomi.getSimptomi().add("KIJANJE");
+        sviSimptomi.getSimptomi().add("KASALJ");
+end
+
+
+rule "Upala krajnika bolest"
+    agenda-group "bolest"
+    salience 100
+    when
+        $dto: String( this == "UPALA KRAJNIKA")
+    then
+        System.out.println("Upala krajnika ");
+        sviSimptomi.getSimptomi().add("UMOR");
+        sviSimptomi.getSimptomi().add("BOL U GRLU");
+        sviSimptomi.getSimptomi().add("GLAVOBOLJA");
+        sviSimptomi.getSimptomi().add("BOL KOJI SE SIRI DO USIJU");
+        sviSimptomi.getSimptomi().add("GUBITAK APETITA");
+        sviSimptomi.getSimptomi().add("TEMPERATURA VECA OD 40C DO 41C");
+        sviSimptomi.getSimptomi().add("BOL KOJI SE SIRI DO USIJU");
+         sviSimptomi.getSimptomi().add("ZUTI SEKRET IZ NOSA");
+         sviSimptomi.getSimptomi().add("DRHTAVICA");
+end
+
+
+
+rule "Sinusna infekcija bolest"
+    agenda-group "bolest"
+    salience 100
+    when
+        $dto: String( this == "SINUSNA INFEKCIJA")
+    then
+        System.out.println("Dijabetes ");
+        sviSimptomi.getSimptomi().add("ZUTI SEKRET IZ NOSA");
+        sviSimptomi.getSimptomi().add("BOL U GRLU");
+        sviSimptomi.getSimptomi().add("GLAVOBOLJA");
+        sviSimptomi.getSimptomi().add("KASALJ");
+        sviSimptomi.getSimptomi().add("OTICANJE OKO OCIJU");
+        sviSimptomi.getSimptomi().add("TEMPERATURA VECA OD 38C");
+        sviSimptomi.getSimptomi().add("BOLOVAO OD PREHLADE ILI GROZNICE U POSLEDNJIH 60 DANA");
+end
+
+
+rule "Dijabetes bolest"
+    agenda-group "bolest"
+    salience 100
+    when
+        $dto: String( this == "DIJABETES")
+    then
+        System.out.println("Dijabetes ");
+        sviSimptomi.getSimptomi().add("CESTO URINIRANJE");
+        sviSimptomi.getSimptomi().add("GUBITAK TELESNE TEZINE");
+        sviSimptomi.getSimptomi().add("MUCNINA I POVRACANJE");
+        sviSimptomi.getSimptomi().add("ZAMOR");
+end
+
+
+
+rule "Hipertenzija bolest"
+    agenda-group "bolest"
+    salience 100
+    when
+        $dto: String( this == "HIPERTENZIJA")
+    then
+        System.out.println("Hipertenzija ");
+        sviSimptomi.getSimptomi().add("U POSLEDNJIH 6 MESECI ZABELEZENO BAREM 10 SLUCAJEVA VISOKOG PRITISKA");
+
+end
+
+
+
+
+rule "Hronicna bubrezna bolest bolest"
+    agenda-group "bolest"
+    salience 100
+    when
+        $dto: String( this == "HRONICNA BUBREZNA BOLEST")
+    then
+        System.out.println("Hronicna bubrezna bolest ");
+        sviSimptomi.getSimptomi().add("NOCTURIA");
+        sviSimptomi.getSimptomi().add("OTICANJE NOGU I ZGLOBOVA");
+        sviSimptomi.getSimptomi().add("GUSENJE");
+        sviSimptomi.getSimptomi().add("ZAMOR");
+        sviSimptomi.getSimptomi().add("BOL U GRUDIM");
+        sviSimptomi.getSimptomi().add("BOLUJE OD HIPERTENZIJE VISE OD 6 MESECI");
+        sviSimptomi.getSimptomi().add("BOLUJE OD DIJABETESA");
+end
+
+
+rule "Akutna bubrezna bolest bolest"
+    agenda-group "bolest"
+    salience 100
+    when
+        $dto: String( this == "AKUTNA BUBREZNA POVREDA")
+    then
+        System.out.println("Akutna bubrezna bolest ");
+        sviSimptomi.getSimptomi().add("OTICANJE NOGU I ZGLOBOVA");
+        sviSimptomi.getSimptomi().add("GUSENJE");
+        sviSimptomi.getSimptomi().add("ZAMOR");
+        sviSimptomi.getSimptomi().add("DIJAREJA");
+        sviSimptomi.getSimptomi().add("OPORAVLJA SE OD OPERACIJE");
+        sviSimptomi.getSimptomi().add("U POSLEDNJIH 14 DANA IMAO POVISENJU TELESNU TEMPERATURU");
+        sviSimptomi.getSimptomi().add("U POSLEDNJIH 21 DANA PRIMAO ANTIBIOTIKE");
+end

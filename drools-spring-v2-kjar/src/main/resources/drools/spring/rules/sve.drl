@@ -11,11 +11,11 @@ import sbz.projekat.model.IstorijaBolesti;
 import sbz.projekat.model.enums.TipLeka;
 
 
-global SveBolestiDTO bolesti;
+global SveBolestiDTO sveBolesti;
 
 
-rule "Druga provera"
-    agenda-group "najverovatnije"
+rule "Druga provera sve"
+    agenda-group "sve"
     salience 999
     when
         $dto: DroolsDto()
@@ -24,8 +24,8 @@ rule "Druga provera"
 end
 
 
-rule "Prva provera"
-    agenda-group "najverovatnije"
+rule "Prva provera sve"
+    agenda-group "sve"
     salience 1000
     when
         $temp: CounterDTO()
@@ -34,13 +34,13 @@ rule "Prva provera"
 end
 
 
-rule "Prehlada"
-    agenda-group "najverovatnije"
+rule "Prehlada sve"
+    agenda-group "sve"
     salience 100
     when
         $temp: CounterDTO() @Watch(!vrednosti)
         $dto: DroolsDto($simptomi: simptomi)
-        $komada : Number(intValue >= 4) from accumulate(
+        $komada : Number() from accumulate(
           String(
                 this=="CURENJE IZ NOSA" || this=="BOL U GRLU" || this=="GLAVOBOLJA" || this=="KIJANJE" || this=="KASALJ"
             ) from $simptomi,
@@ -51,10 +51,8 @@ rule "Prehlada"
         )
     then
         System.out.println("Ima " + $komada + " simptoma za prehladu");
-        if($temp.getNaj1() < $komada.intValue() ){$temp.setNaj1($komada.intValue());}
         $temp.getVrednosti().put("PREHLADA", $komada.intValue());
         update($temp)
-
         System.out.println($temp.getVrednosti().get("PREHLADA"));
 
 
@@ -62,13 +60,13 @@ end
 
 
 
-rule "Groznica"
-    agenda-group "najverovatnije"
+rule "Groznica sve"
+    agenda-group "sve"
     salience 100
     when
         $temp: CounterDTO() @Watch(!vrednosti)
         $dto: DroolsDto($simptomi: simptomi)
-        $komada : Number(intValue >= 4) from accumulate(
+        $komada : Number() from accumulate(
           String(
                 this=="CURENJE IZ NOSA" || this=="BOL U GRLU" || this=="GLAVOBOLJA" || this=="KIJANJE" || this=="KASALJ" || this=="DRHTAVICA" || this=="TEMPERATURA VECA OD 38C"
             ) from $simptomi,
@@ -79,7 +77,6 @@ rule "Groznica"
         )
     then
         System.out.println("Ima " + $komada + " simptoma za groznicu");
-        if($temp.getNaj1() < $komada.intValue() ){$temp.setNaj1($komada.intValue());}
         $temp.getVrednosti().put("GROZNICA", $komada.intValue());
         update($temp)
 
@@ -88,13 +85,13 @@ rule "Groznica"
 end
 
 
-rule "Upala krajnika"
-    agenda-group "najverovatnije"
+rule "Upala krajnika sve"
+    agenda-group "sve"
     salience 100
     when
         $temp: CounterDTO() @Watch(!vrednosti)
         $dto: DroolsDto($simptomi: simptomi)
-        $komada : Number(intValue >= 4) from accumulate(
+        $komada : Number() from accumulate(
           String(
                 this=="UMOR" || this=="BOL U GRLU" || this=="GLAVOBOLJA" || this=="BOL KOJI SE SIRI DO USIJU" || this=="TEMPERATURA VECA OD 40C DO 41C" || this=="DRHTAVICA" || this=="GUBITAK APETITA" || this=="ZUTI SEKRET IZ NOSA"
             ) from $simptomi,
@@ -105,7 +102,6 @@ rule "Upala krajnika"
         )
     then
         System.out.println("Ima " + $komada + " simptoma za upalu krajnika");
-        if($temp.getNaj1() < $komada.intValue() ){$temp.setNaj1($komada.intValue());}
         $temp.getVrednosti().put("KRAJNICI", $komada.intValue());
         update($temp)
 
@@ -115,8 +111,8 @@ end
 
 
 
-rule "Sinusna infekcija"
-    agenda-group "najverovatnije"
+rule "Sinusna infekcija sve"
+    agenda-group "sve"
     salience 100
     when
         $date : Date()
@@ -125,7 +121,7 @@ rule "Sinusna infekcija"
 
 
 
-        $komada : Number(intValue >= 3) from accumulate(
+        $komada : Number() from accumulate(
           String(
                 this=="OTICANJE OKO OCIJU" || this=="BOL U GRLU" || this=="GLAVOBOLJA" || this=="TEMPERATURA VECA OD 38C" || this=="KASALJ"  || this=="ZUTI SEKRET IZ NOSA"
             ) from $simptomi,
@@ -153,20 +149,17 @@ rule "Sinusna infekcija"
 
     then
 
-        if( $komada.intValue()+$specijalan.intValue() > 4){
             System.out.println("Ima obicni " + $komada + " simptoma za sinusnu infekciju");
             System.out.println("Ima specijalnih " + $specijalan + " simptoma za sinusnu infekciju");
             $temp.getVrednosti().put("SINUSI", $komada.intValue()+$specijalan.intValue());
             System.out.println($temp.getVrednosti().get("SINUSI"));
-            if($temp.getNaj1() < $komada.intValue()+$specijalan.intValue() ){$temp.setNaj1($komada.intValue()+$specijalan.intValue());}
-        }
         update($temp)
 
 end
 
 
-rule "Ispis prvih provera"
-    agenda-group "najverovatnije"
+rule "Ispis prvih provera sve"
+    agenda-group "sve"
     salience 90
     when
         $temp: CounterDTO() @Watch(!vrednosti)
@@ -179,13 +172,13 @@ rule "Ispis prvih provera"
 
 end
 
-rule "Dijabetes"
-    agenda-group "najverovatnije"
+rule "Dijabetes sve"
+    agenda-group "sve"
     salience 80
     when
         $temp: CounterDTO() @Watch(!vrednosti)
         $dto: DroolsDto($simptomi: simptomi)
-        $komada : Number(intValue >= 4) from accumulate(
+        $komada : Number() from accumulate(
           String(
                this=="CESTO URINIRANJE" || this=="GUBITAK TELESNE TEZINE" || this=="MUCNINA I POVRACANJE" || this=="ZAMOR"
             ) from $simptomi,
@@ -196,22 +189,21 @@ rule "Dijabetes"
         )
     then
         System.out.println("Ima " + $komada + " simptoma za dijabetes");
-        if($temp.getNaj2() < $komada.intValue() ){$temp.setNaj2($komada.intValue());}
         $temp.getVrednosti().put("DIJABETES", $komada.intValue());
         update($temp)
 
 end
 
 
-rule "Hipertenzija"
-    agenda-group "najverovatnije"
+rule "Hipertenzija sve"
+    agenda-group "sve"
     salience 100
     when
         $date : Date()
                 $temp: CounterDTO() @Watch(!vrednosti)
                 $dto: DroolsDto( $istorija : istorija)
 
-                $specijalan : Number(intValue>=10) from accumulate(
+                $specijalan : Number() from accumulate(
                                 $is :  IstorijaBolesti(
                                          $simptom : simptomi,
                                          $temp.checkDane($date, vreme, 180)
@@ -230,7 +222,6 @@ rule "Hipertenzija"
     then
 
         System.out.println("Ima specijalnih " + $specijalan + " simptoma za hipertenziju");
-        if($temp.getNaj2() < $specijalan.intValue() ){ $temp.setNaj2($specijalan.intValue());}
         $temp.getVrednosti().put("HIPERTENZIJA", $specijalan.intValue());
         update($temp)
 
@@ -239,8 +230,8 @@ end
 
 
 
-rule "Ispis drugih provera"
-    agenda-group "najverovatnije"
+rule "Ispis drugih provera sve"
+    agenda-group "sve"
     salience 90
     when
         $temp: CounterDTO() @Watch(!vrednosti)
@@ -254,14 +245,14 @@ end
 
 
 
-rule "Hronicna bubrezna bolest"
-    agenda-group "najverovatnije"
+rule "Hronicna bubrezna bolest sve"
+    agenda-group "sve"
     salience 60
     when
         $temp: CounterDTO() @Watch(!vrednosti)
         $date : Date()
         $dto: DroolsDto($simptomi: simptomi, $istorija : istorija)
-        $komada : Number(intValue >= 2) from accumulate(
+        $komada : Number() from accumulate(
           String(
                this=="NOCTURIA" || this=="OTICANJE NOGU I ZGLOBOVA" || this=="GUSENJE" || this=="ZAMOR" || this=="BOL U GRUDIM"
             ) from $simptomi,
@@ -284,7 +275,7 @@ rule "Hronicna bubrezna bolest"
                                      reverse(novi -= 1;),
                                      result(novi)
                                  )
-         $specijalan2 : Number(intValue >=1) from accumulate(
+         $specijalan2 : Number() from accumulate(
                                          $is :  IstorijaBolesti(
                                                  $temp.check6m($date, vreme),
                                                   $bolesti : bolesti
@@ -302,8 +293,6 @@ rule "Hronicna bubrezna bolest"
     then
         System.out.println("Ima opstih" + $komada + " simptoma za hronicu");
         System.out.println("Ima specijalnih" + $specijalan2.intValue() + " simptoma za hronicu");
-        if($temp.getNaj3() < $specijalan2.intValue() ){$temp.setNaj3($specijalan2.intValue());}
-
         $temp.getVrednosti().put("HRONICNA", $komada.intValue()+$specijalan2.intValue());
         update($temp)
 
@@ -311,14 +300,14 @@ end
 
 
 
-rule "Akutna bubrezna bolest"
-    agenda-group "najverovatnije"
+rule "Akutna bubrezna bolest sve"
+    agenda-group "sve"
     salience 60
     when
         $temp: CounterDTO() @Watch(!vrednosti)
         $date : Date()
         $dto: DroolsDto($simptomi: simptomi, $istorija : istorija)
-        $komada : Number(intValue >= 2) from accumulate(
+        $komada : Number() from accumulate(
           String(
               this=="OTICANJE NOGU I ZGLOBOVA" || this=="GUSENJE" || this=="ZAMOR" || this=="DIJAREJA"
             ) from $simptomi,
@@ -356,7 +345,7 @@ rule "Akutna bubrezna bolest"
                                              reverse(novi2 -= 1;),
                                              result(novi2 + $specijalan1.intValue())
                                          )
-        $specijalan3 : Number(intValue >=1) from accumulate(
+        $specijalan3 : Number() from accumulate(
                                                  $is :  IstorijaBolesti(
                                                           $bol : bolesti
                                                      ) from $istorija,
@@ -373,14 +362,13 @@ rule "Akutna bubrezna bolest"
     then
         System.out.println("Ima opstih " + $komada + " simptoma za akutnu");
         System.out.println("Ima specijalnih " +$specijalan3.intValue() + " simptoma za akutnu");
-        if($temp.getNaj3() < $specijalan3.intValue() ){$temp.setNaj3($specijalan3.intValue());}
         $temp.getVrednosti().put("AKUTNA", $komada.intValue()+$specijalan3.intValue());
         update($temp)
 
 end
 
-rule "Ispis trecih provera"
-    agenda-group "najverovatnije"
+rule "Ispis trecih provera sve"
+    agenda-group "sve"
     salience 50
     when
         $temp: CounterDTO() @Watch(!vrednosti)
@@ -393,55 +381,59 @@ end
 
 
 
-rule "Odabir najverovatnije bolesti treceg tipa"
-    agenda-group "najverovatnije"
+rule "Odabir svega 3"
+    agenda-group "sve"
     salience 40
     when
         $temp: CounterDTO() @Watch(!vrednosti)
     then
-    if($temp.getNaj3() != -1){
-        if($temp.getVrednosti().get("HRONICNA")==$temp.getNaj3())
-            bolesti.getBolesti().add("HRONICNA BUBREZNA BOLEST");
-        else
-            bolesti.getBolesti().add("AKUTNA BUBREZNA POVREDA");
-    }
 
+    int temp = $temp.getVrednosti().get("HRONICNA");
+    if(temp>0)
+        sveBolesti.getBolesti().add("HRONICNA BUBREZNA BOLEST");
+    temp= $temp.getVrednosti().get("AKUTNA");
+    if(temp>0)
+        sveBolesti.getBolesti().add("AKUTNA BUBREZNA POVREDA");
 
 end
 
 
-
-rule "Odabir najverovatnije bolesti drugog tipa"
-    agenda-group "najverovatnije"
-    salience 20
+rule "Odabir svega 2"
+    agenda-group "sve"
+    salience 40
     when
         $temp: CounterDTO() @Watch(!vrednosti)
     then
-        if($temp.getNaj2() != -1){
-            if($temp.getVrednosti().get("HIPERTENZIJA")==$temp.getNaj2())
-                bolesti.getBolesti().add("HIPERTENZIJA");
-            else
-                bolesti.getBolesti().add("DIJABETES");
-            }
 
-
+    int temp = $temp.getVrednosti().get("HIPERTENZIJA");
+    if(temp>0)
+        sveBolesti.getBolesti().add("HIPERTENZIJA");
+    temp= $temp.getVrednosti().get("DIJABETES");
+    if(temp>0)
+        sveBolesti.getBolesti().add("DIJABETES");
 end
 
 
-rule "Odabir najverovatnije bolesti prvog tipa"
-    agenda-group "najverovatnije"
-    salience 0
+rule "Odabir svega 1"
+    agenda-group "sve"
+    salience 40
     when
         $temp: CounterDTO() @Watch(!vrednosti)
     then
-     if($temp.getNaj1() != -1){
-        if($temp.getVrednosti().get("PREHLADA")==$temp.getNaj1())
-            bolesti.getBolesti().add("PREHLADA");
-        else if($temp.getVrednosti().get("GROZNICA")==$temp.getNaj1())
-            bolesti.getBolesti().add("GROZNICA");
-        else if($temp.getVrednosti().get("KRAJNICI")==$temp.getNaj1())
-                    bolesti.getBolesti().add("UPALA KRAJNIKA");
-        else
-            bolesti.getBolesti().add("SINUSNA INFEKCIJA");
-     }
+
+    int temp = $temp.getVrednosti().get("PREHLADA");
+    if(temp>0)
+        sveBolesti.getBolesti().add("PREHLADA");
+    temp= $temp.getVrednosti().get("GROZNICA");
+    if(temp>0)
+        sveBolesti.getBolesti().add("GROZNICA");
+    temp= $temp.getVrednosti().get("KRAJNICI");
+    if(temp>0)
+        sveBolesti.getBolesti().add("UPALA KRAJNIKA");
+    temp= $temp.getVrednosti().get("SINUSI");
+    if(temp>0)
+        sveBolesti.getBolesti().add("SINUSNA INFEKCIJA");
+
+
 end
+

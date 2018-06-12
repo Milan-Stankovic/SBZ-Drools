@@ -1,0 +1,25 @@
+
+import sbz.projekat.dto.ValidacijaDTO;
+
+global String validiraj;
+
+rule "Validacija"
+    agenda-group "validacija"
+    salience 100
+    when
+        $valid: ValidacijaDTO($alergije : alergije, $sastojci : sastojci)
+        $okJe : Boolean() from accumulate(
+          $trenitni : String(
+
+            ) from $alergije,
+            init(boolean count = true;),
+            action( for( Object s: $sastojci )
+                 if($trenitni.equals(s) ) count =false;),
+            result(count)
+        )
+    then
+        if($okJe)
+            validiraj = "OK";
+        System.out.println(validiraj);
+
+end

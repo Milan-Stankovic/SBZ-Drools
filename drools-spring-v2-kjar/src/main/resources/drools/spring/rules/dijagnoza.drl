@@ -350,7 +350,7 @@ rule "Akutna bubrezna bolest"
                                              init(int novi2 = 0;),
                                              action(
                                                  for( Object l: $lek )
-                                                     if( ((Lek)l).getTip() == TipLeka.ANTIBOTIK ) novi2 += 1;
+                                                     if( ((Lek)l).getTip() == TipLeka.ANTIBIOTIK ) novi2 += 1;
 
                                              ),
                                              reverse(novi2 -= 1;),
@@ -390,7 +390,6 @@ rule "Ispis trecih provera"
         System.out.println("Ima simptoma za akutnu : " + $temp.getVrednosti().get("AKUTNA"));
 
 end
-
 
 
 
@@ -440,7 +439,7 @@ rule "Odabir najverovatnije bolesti prvog tipa"
             bolesti.getBolesti().add("PREHLADA");
         else if($temp.getVrednosti().get("GROZNICA")==$temp.getNaj1())
             bolesti.getBolesti().add("GROZNICA");
-        else if($temp.getVrednosti().get("UPALA KRAJNIKA")==$temp.getNaj1())
+        else if($temp.getVrednosti().get("KRAJNICI")==$temp.getNaj1())
                     bolesti.getBolesti().add("UPALA KRAJNIKA");
         else
             bolesti.getBolesti().add("SINUSNA INFEKCIJA");

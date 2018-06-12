@@ -1,0 +1,124 @@
+package drools.spring.rules
+
+import sbz.projekat.dto.SrckaEvent;
+import sbz.projekat.dto.KiseonikEvent;
+import sbz.projekat.dto.GusenjeEvent;
+import sbz.projekat.dto.DijalizaEvent;
+import sbz.projekat.dto.SrceEvent;
+import sbz.projekat.dto.MokrenjeEvent;
+import sbz.projekat.model.Pacijent;
+import sbz.projekat.model.Bolest;
+import sbz.projekat.model.IstorijaBolesti;
+import sbz.projekat.dto.MonitorDTO;
+
+global MonitorDTO ispis;
+
+rule "Dise li ?"
+    salience 100
+    when
+        $o1: KiseonikEvent()
+        Number(intValue <7) from accumulate(
+                $o2: KiseonikEvent(
+                    this != $o1
+                ),
+                count($o2)
+            )
+
+        not (KiseonikEvent() over window:time(15m))
+    then
+        insert(new GusenjeEvent());
+end
+
+
+
+rule "Dijaliza ?"
+    salience 100
+    when
+        $m1: MokrenjeEvent()
+        $p1: Pacijent( $istorija : istorija)
+
+        Number(intValue <10) from accumulate(
+                $m2: MokrenjeEvent(
+                    this != $m1
+                ),
+                count($m2)
+            )
+
+        $o1: SrceEvent()
+                Number(intValue >10) from accumulate(
+                $o2: SrceEvent(
+                    this != $o1
+                ),
+                count($o2)
+        )
+
+         $specijalan1 : Number(intValue >=1) from accumulate(
+            IstorijaBolesti(
+                $bolesti : bolesti
+                    )from $istorija,
+                    init(int novi = 0;),
+                    action(
+                        for( Object b: $bolesti )
+                            if("HRONICNA BUBREZNA BOLEST".equals(((Bolest)b).getNaziv())) novi += 1;
+                        ),
+                    reverse(novi -= 1;),
+                    result(novi)
+                    )
+    then
+        insert(new DijalizaEvent());
+end
+
+
+
+
+
+
+rule "Kuca li ?"
+    salience 100
+    when
+        $o1: SrceEvent()
+        Number(intValue >25) from accumulate(
+                $o2: SrceEvent(
+                    this != $o1
+                ),
+                count($o2)
+            )
+    then
+        insert(new SrckaEvent());
+end
+
+
+
+rule "Dijaliza"
+    salience 10
+    when
+        $o1: DijalizaEvent()
+        $p1: Pacijent();
+    then
+       ispis.setDializaPoruka($p1.getIme() + " " +  $p1.getPrezime() + " needs dialysis !!!");
+
+end
+
+
+
+rule "Ne dise"
+    salience 10
+    when
+        $o1: GusenjeEvent()
+        $p1: Pacijent();
+    then
+       ispis.setGusenjePoruka($p1.getIme() + " " +  $p1.getPrezime() + " is choking !!!");
+
+end
+
+
+
+rule "Srcka"
+    salience 10
+    when
+        $o1: SrckaEvent()
+        $p1: Pacijent();
+    then
+       ispis.setSrckaPoruka($p1.getIme() + " " +  $p1.getPrezime() + " is having a hearth attack !!!");
+
+end
