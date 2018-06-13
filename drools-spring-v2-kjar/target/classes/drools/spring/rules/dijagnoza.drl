@@ -30,7 +30,16 @@ rule "Prva provera"
     when
         $temp: CounterDTO()
     then
+        $temp.getVrednosti().put("PREHLADA", -1);
+        $temp.getVrednosti().put("GROZNICA", -1);
+        $temp.getVrednosti().put("KRAJNICI", -1);
+        $temp.getVrednosti().put("SINUSI", -1);
+        $temp.getVrednosti().put("DIJABETES", -1);
+        $temp.getVrednosti().put("HIPERTENZIJA", -1);
+        $temp.getVrednosti().put("HRONICNA", -1);
+        $temp.getVrednosti().put("AKUTNA", -1);
         System.out.println("Evo counter");
+        update($temp)
 end
 
 
