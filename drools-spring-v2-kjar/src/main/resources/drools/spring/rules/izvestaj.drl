@@ -152,6 +152,24 @@ rule "Izvestaj hronicni akutna bubrezna"
 end
 
 
+rule "Ispisi izvestaj"
+    agenda-group "izvestaj"
+    salience 10
+    when  $dto: Pacijent()
+
+    then
+        for (Long id : izvestaj.getImunitet() ) {
+            System.out.println("Sa losim imunitetom : " + id);
+        }
+
+         for (Long id2 : izvestaj.getHronicni() ) {
+            System.out.println("Hronicni : " + id2);
+         }
+         for (Long id3 : izvestaj.getZavisnici() ) {
+            System.out.println("Zavisnik :  : " + id3);
+         }
+
+end
 
 rule "Izvestaj zavisnici"
     agenda-group "izvestaj"

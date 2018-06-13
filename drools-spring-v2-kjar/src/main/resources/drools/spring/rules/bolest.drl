@@ -1,9 +1,10 @@
 package drools.spring.rules
 
-import sbz.projekat.dto.DijagnozaDTO;
+import sbz.projekat.dto.RezultatSimptomiDTO;
 
 
-global DijagnozaDTO sviSimptomi;
+global RezultatSimptomiDTO sviSimptomi;
+
 
 
 rule "Groznica bolest"
@@ -13,13 +14,13 @@ rule "Groznica bolest"
         $dto: String( this == "GROZNICA")
     then
         System.out.println("Groznica ");
-        sviSimptomi.getSimptomi().add("CURENJE IZ NOSA");
-        sviSimptomi.getSimptomi().add("BOL U GRLU");
-        sviSimptomi.getSimptomi().add("GLAVOBOLJA");
-        sviSimptomi.getSimptomi().add("KIJANJE");
-        sviSimptomi.getSimptomi().add("KASALJ");
-        sviSimptomi.getSimptomi().add("DRHTAVICA");
-        sviSimptomi.getSimptomi().add("TEMPERATURA VECA OD 38C");
+        sviSimptomi.getOpsti().add("CURENJE IZ NOSA");
+        sviSimptomi.getOpsti().add("BOL U GRLU");
+        sviSimptomi.getOpsti().add("GLAVOBOLJA");
+        sviSimptomi.getOpsti().add("KIJANJE");
+        sviSimptomi.getOpsti().add("KASALJ");
+        sviSimptomi.getOpsti().add("DRHTAVICA");
+        sviSimptomi.getOpsti().add("TEMPERATURA VECA OD 38C");
 end
 
 
@@ -30,11 +31,11 @@ rule "Prehlada bolest"
         $dto: String( this == "PREHLADA")
     then
         System.out.println("Prehlada ");
-        sviSimptomi.getSimptomi().add("CURENJE IZ NOSA");
-        sviSimptomi.getSimptomi().add("BOL U GRLU");
-        sviSimptomi.getSimptomi().add("GLAVOBOLJA");
-        sviSimptomi.getSimptomi().add("KIJANJE");
-        sviSimptomi.getSimptomi().add("KASALJ");
+        sviSimptomi.getOpsti().add("CURENJE IZ NOSA");
+        sviSimptomi.getOpsti().add("BOL U GRLU");
+        sviSimptomi.getOpsti().add("GLAVOBOLJA");
+        sviSimptomi.getOpsti().add("KIJANJE");
+        sviSimptomi.getOpsti().add("KASALJ");
 end
 
 
@@ -45,15 +46,15 @@ rule "Upala krajnika bolest"
         $dto: String( this == "UPALA KRAJNIKA")
     then
         System.out.println("Upala krajnika ");
-        sviSimptomi.getSimptomi().add("UMOR");
-        sviSimptomi.getSimptomi().add("BOL U GRLU");
-        sviSimptomi.getSimptomi().add("GLAVOBOLJA");
-        sviSimptomi.getSimptomi().add("BOL KOJI SE SIRI DO USIJU");
-        sviSimptomi.getSimptomi().add("GUBITAK APETITA");
-        sviSimptomi.getSimptomi().add("TEMPERATURA VECA OD 40C DO 41C");
-        sviSimptomi.getSimptomi().add("BOL KOJI SE SIRI DO USIJU");
-         sviSimptomi.getSimptomi().add("ZUTI SEKRET IZ NOSA");
-         sviSimptomi.getSimptomi().add("DRHTAVICA");
+        sviSimptomi.getOpsti().add("UMOR");
+        sviSimptomi.getOpsti().add("BOL U GRLU");
+        sviSimptomi.getOpsti().add("GLAVOBOLJA");
+        sviSimptomi.getOpsti().add("BOL KOJI SE SIRI DO USIJU");
+        sviSimptomi.getOpsti().add("GUBITAK APETITA");
+        sviSimptomi.getOpsti().add("TEMPERATURA VECA OD 40C DO 41C");
+        sviSimptomi.getOpsti().add("BOL KOJI SE SIRI DO USIJU");
+         sviSimptomi.getOpsti().add("ZUTI SEKRET IZ NOSA");
+         sviSimptomi.getOpsti().add("DRHTAVICA");
 end
 
 
@@ -65,13 +66,13 @@ rule "Sinusna infekcija bolest"
         $dto: String( this == "SINUSNA INFEKCIJA")
     then
         System.out.println("Dijabetes ");
-        sviSimptomi.getSimptomi().add("ZUTI SEKRET IZ NOSA");
-        sviSimptomi.getSimptomi().add("BOL U GRLU");
-        sviSimptomi.getSimptomi().add("GLAVOBOLJA");
-        sviSimptomi.getSimptomi().add("KASALJ");
-        sviSimptomi.getSimptomi().add("OTICANJE OKO OCIJU");
-        sviSimptomi.getSimptomi().add("TEMPERATURA VECA OD 38C");
-        sviSimptomi.getSimptomi().add("BOLOVAO OD PREHLADE ILI GROZNICE U POSLEDNJIH 60 DANA");
+        sviSimptomi.getOpsti().add("ZUTI SEKRET IZ NOSA");
+        sviSimptomi.getOpsti().add("BOL U GRLU");
+        sviSimptomi.getOpsti().add("GLAVOBOLJA");
+        sviSimptomi.getOpsti().add("KASALJ");
+        sviSimptomi.getOpsti().add("OTICANJE OKO OCIJU");
+        sviSimptomi.getOpsti().add("TEMPERATURA VECA OD 38C");
+        sviSimptomi.getSpecificni().add("BOLOVAO OD PREHLADE ILI GROZNICE U POSLEDNJIH 60 DANA");
 end
 
 
@@ -82,10 +83,10 @@ rule "Dijabetes bolest"
         $dto: String( this == "DIJABETES")
     then
         System.out.println("Dijabetes ");
-        sviSimptomi.getSimptomi().add("CESTO URINIRANJE");
-        sviSimptomi.getSimptomi().add("GUBITAK TELESNE TEZINE");
-        sviSimptomi.getSimptomi().add("MUCNINA I POVRACANJE");
-        sviSimptomi.getSimptomi().add("ZAMOR");
+        sviSimptomi.getOpsti().add("CESTO URINIRANJE");
+        sviSimptomi.getOpsti().add("GUBITAK TELESNE TEZINE");
+        sviSimptomi.getOpsti().add("MUCNINA I POVRACANJE");
+        sviSimptomi.getOpsti().add("ZAMOR");
 end
 
 
@@ -97,7 +98,7 @@ rule "Hipertenzija bolest"
         $dto: String( this == "HIPERTENZIJA")
     then
         System.out.println("Hipertenzija ");
-        sviSimptomi.getSimptomi().add("U POSLEDNJIH 6 MESECI ZABELEZENO BAREM 10 SLUCAJEVA VISOKOG PRITISKA");
+        sviSimptomi.getSpecificni().add("U POSLEDNJIH 6 MESECI ZABELEZENO BAREM 10 SLUCAJEVA VISOKOG PRITISKA");
 
 end
 
@@ -111,13 +112,13 @@ rule "Hronicna bubrezna bolest bolest"
         $dto: String( this == "HRONICNA BUBREZNA BOLEST")
     then
         System.out.println("Hronicna bubrezna bolest ");
-        sviSimptomi.getSimptomi().add("NOCTURIA");
-        sviSimptomi.getSimptomi().add("OTICANJE NOGU I ZGLOBOVA");
-        sviSimptomi.getSimptomi().add("GUSENJE");
-        sviSimptomi.getSimptomi().add("ZAMOR");
-        sviSimptomi.getSimptomi().add("BOL U GRUDIM");
-        sviSimptomi.getSimptomi().add("BOLUJE OD HIPERTENZIJE VISE OD 6 MESECI");
-        sviSimptomi.getSimptomi().add("BOLUJE OD DIJABETESA");
+        sviSimptomi.getOpsti().add("NOCTURIA");
+        sviSimptomi.getOpsti().add("OTICANJE NOGU I ZGLOBOVA");
+        sviSimptomi.getOpsti().add("GUSENJE");
+        sviSimptomi.getOpsti().add("ZAMOR");
+        sviSimptomi.getOpsti().add("BOL U GRUDIM");
+        sviSimptomi.getSpecificni().add("BOLUJE OD HIPERTENZIJE VISE OD 6 MESECI");
+        sviSimptomi.getSpecificni().add("BOLUJE OD DIJABETESA");
 end
 
 
@@ -128,11 +129,11 @@ rule "Akutna bubrezna bolest bolest"
         $dto: String( this == "AKUTNA BUBREZNA POVREDA")
     then
         System.out.println("Akutna bubrezna bolest ");
-        sviSimptomi.getSimptomi().add("OTICANJE NOGU I ZGLOBOVA");
-        sviSimptomi.getSimptomi().add("GUSENJE");
-        sviSimptomi.getSimptomi().add("ZAMOR");
-        sviSimptomi.getSimptomi().add("DIJAREJA");
-        sviSimptomi.getSimptomi().add("OPORAVLJA SE OD OPERACIJE");
-        sviSimptomi.getSimptomi().add("U POSLEDNJIH 14 DANA IMAO POVISENJU TELESNU TEMPERATURU");
-        sviSimptomi.getSimptomi().add("U POSLEDNJIH 21 DANA PRIMAO ANTIBIOTIKE");
+        sviSimptomi.getOpsti().add("OTICANJE NOGU I ZGLOBOVA");
+        sviSimptomi.getOpsti().add("GUSENJE");
+        sviSimptomi.getOpsti().add("ZAMOR");
+        sviSimptomi.getOpsti().add("DIJAREJA");
+        sviSimptomi.getSpecificni().add("OPORAVLJA SE OD OPERACIJE");
+        sviSimptomi.getSpecificni().add("U POSLEDNJIH 14 DANA IMAO POVISENJU TELESNU TEMPERATURU");
+        sviSimptomi.getSpecificni().add("U POSLEDNJIH 21 DANA PRIMAO ANTIBIOTIKE");
 end

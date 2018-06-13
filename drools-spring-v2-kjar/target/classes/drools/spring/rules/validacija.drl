@@ -1,7 +1,8 @@
 
 import sbz.projekat.dto.ValidacijaDTO;
+import sbz.projekat.dto.RezultatStringDTO;
 
-global String validiraj;
+global RezultatStringDTO validiraj;
 
 rule "Validacija"
     agenda-group "validacija"
@@ -19,7 +20,7 @@ rule "Validacija"
         )
     then
         if($okJe)
-            validiraj = "OK";
-        System.out.println(validiraj);
+            validiraj.setTekst("OK");
+        System.out.println(validiraj.getTekst());
 
 end
