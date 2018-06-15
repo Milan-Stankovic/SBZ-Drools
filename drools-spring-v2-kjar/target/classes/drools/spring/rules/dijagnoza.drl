@@ -144,7 +144,7 @@ rule "Sinusna infekcija"
             result(count)
         )
 
-        $specijalan : Number() from accumulate(
+        $specijalan : Number(intValue >=4) from accumulate(
                 $is :  IstorijaBolesti(
                          $bolesti : bolesti,
                          $temp.checkDane($date, vreme, 60)
@@ -156,19 +156,18 @@ rule "Sinusna infekcija"
 
                     ),
                     reverse(novi -= 1;),
-                    result(novi)
+                    result(novi +$komada.intValue())
                 )
 
 
     then
 
-        if( $komada.intValue()+$specijalan.intValue() > 4){
-            System.out.println("Ima obicni " + $komada + " simptoma za sinusnu infekciju");
-            System.out.println("Ima specijalnih " + $specijalan + " simptoma za sinusnu infekciju");
-            $temp.getVrednosti().put("SINUSI", $komada.intValue()+$specijalan.intValue());
-            System.out.println($temp.getVrednosti().get("SINUSI"));
-            if($temp.getNaj1() < $komada.intValue()+$specijalan.intValue() ){$temp.setNaj1($komada.intValue()+$specijalan.intValue());}
-        }
+        System.out.println("Ima obicni " + $komada + " simptoma za sinusnu infekciju");
+        System.out.println("Ima specijalnih " + $specijalan + " simptoma za sinusnu infekciju");
+        $temp.getVrednosti().put("SINUSI", $komada.intValue()+$specijalan.intValue());
+        System.out.println($temp.getVrednosti().get("SINUSI"));
+        if($temp.getNaj1() < $komada.intValue()+$specijalan.intValue() ){$temp.setNaj1($komada.intValue()+$specijalan.intValue());}
+
         update($temp)
 
 end
